@@ -1,0 +1,29 @@
+.log {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.8;
+  height: 290px;
+  overflow-y: auto;
+  padding: 1rem;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+}
+.log:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.entry { margin-bottom: 1px; word-break: break-all; }
+
+.time    { color: var(--text-muted); }
+.agent   { color: var(--accent-primary); }
+.details { color: var(--text-muted); }
+
+/* Log level colours */
+.level_ok     { color: var(--accent-green); }
+.level_action { color: var(--accent-teal); }
+.level_warn   { color: var(--accent-amber); }
+.level_error  { color: var(--accent-rose); }
+.level_info   { color: var(--text-secondary); }

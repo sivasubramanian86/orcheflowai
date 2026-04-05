@@ -1,0 +1,32 @@
+.appShell {
+  display: flex;
+  min-height: 100dvh;
+  background: var(--bg-canvas);
+  overflow-x: hidden;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  /* View padding is handled by individual components for better control */
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* Base fade-in for view switching */
+.stage > * {
+  animation: stage-entry 0.4s var(--ease-smooth) forwards;
+}
+
+@keyframes stage-entry {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1024px) {
+  .appShell {
+    flex-direction: row; /* Still keep sidebar on side but compressed */
+  }
+}

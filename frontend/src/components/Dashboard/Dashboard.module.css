@@ -1,0 +1,106 @@
+.container {
+  padding: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100vh - 6rem);
+  display: flex;
+  flex-direction: column;
+}
+
+.hero {
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.heroTag {
+  display: inline-block;
+  background: oklch(62% 0.22 240 / 0.12);
+  color: var(--accent-primary);
+  padding: 0.4rem 1.2rem;
+  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-family: 'Outfit', sans-serif;
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.04em;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2.5rem;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.card {
+  padding: 2.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: all var(--dur-normal) var(--ease-smooth);
+}
+
+.errorBanner {
+  background: oklch(65% 0.22 15 / 0.1);
+  color: oklch(65% 0.22 15);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  border-left: 4px solid oklch(65% 0.22 15);
+  margin-bottom: 1rem;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.panelIcon {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--bg-surface-2);
+  border-radius: var(--radius-md);
+}
+
+.panelTitle {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: var(--text-base);
+  color: var(--text-primary);
+}
+
+.panelSub {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+@media (max-width: 1200px) {
+  .mainGrid { grid-template-columns: 1fr; }
+  .rightCol { order: -1; }
+}

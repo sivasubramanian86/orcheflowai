@@ -1,0 +1,98 @@
+# ─── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.hypothesis/
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env.local
+
+# ─── Secrets & Credentials (CRITICAL — never commit) ─────────────────────────
+.env
+*.env
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+service-account*.json
+gcp-credentials*.json
+*-credentials.json
+application_default_credentials.json
+
+# ─── IDE ─────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Node / Frontend (if any) ────────────────────────────────────────────────
+node_modules/
+.next/
+.nuxt/
+dist/
+out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─── Docker ──────────────────────────────────────────────────────────────────
+# Don't ignore docker-compose.yml (it's source-controlled)
+# But ignore override files with local machine settings
+docker-compose.override.yml
+
+# ─── Terraform ───────────────────────────────────────────────────────────────
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+!*.tfvars.example
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# ─── Logs & Temp ─────────────────────────────────────────────────────────────
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# ─── Test outputs ────────────────────────────────────────────────────────────
+.coverage
+coverage.xml
+htmlcov/
+test-results/
+junit.xml
+
+# ─── GCP / Google Cloud ──────────────────────────────────────────────────────
+.gcloud/
+cloudbuild.log

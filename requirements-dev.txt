@@ -1,0 +1,21 @@
+# Dev dependencies — NOT included in production images
+# Install with: pip install -r requirements-dev.txt
+
+# Testing
+pytest==8.3.5
+pytest-asyncio==0.24.0
+pytest-cov==6.1.0
+httpx==0.28.1           # AsyncClient for FastAPI testing
+
+# Code quality
+black==25.1.0
+ruff==0.9.10
+mypy==1.15.0
+types-requests==2.32.0
+
+# Security scanning
+pip-audit==2.9.0
+bandit==1.8.3
+
+# Type stubs
+types-python-dateutil==2.9.0

@@ -1,0 +1,85 @@
+/* =============================================================================
+   OrcheFlowAI Design Tokens — oklch() 2026 colour system
+   Import this FIRST in globals.css via @import
+   ============================================================================= */
+
+@layer tokens {
+  :root {
+    color-scheme: light dark;
+
+    /* ── Colour (oklch — perceptually uniform) ── */
+    /* Light Mode (Default) */
+    --bg-canvas:      oklch(98% 0.01 260);
+    --bg-surface:     oklch(100% 0 0);
+    --bg-surface-2:   oklch(95% 0.01 260);
+    --border:         oklch(90% 0.02 260);
+    --border-focus:   oklch(60% 0.18 240);
+
+    --text-primary:   oklch(20% 0.02 260);
+    --text-secondary: oklch(45% 0.03 260);
+    --text-muted:     oklch(65% 0.03 260);
+
+    /* Adaptive Brand Accents */
+    --accent-primary: oklch(62% 0.22 240);
+    --accent-violet:  oklch(58% 0.25 295);
+    --accent-teal:    oklch(68% 0.18 185);
+    --accent-amber:   oklch(75% 0.19 85);
+    --accent-rose:    oklch(65% 0.22 15);
+    --accent-green:   oklch(72% 0.20 145);
+
+    /* ── Typography ─────────────────────────────────────────── */
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* ── Fluid type scale ───────────────────────────────────── */
+    --text-xs:   clamp(0.68rem, 1.5vw, 0.75rem);
+    --text-sm:   clamp(0.82rem, 1.8vw, 0.875rem);
+    --text-base: clamp(0.9rem,  2vw,   1rem);
+    --text-lg:   clamp(1.1rem,  2.5vw, 1.25rem);
+    --text-2xl:  clamp(1.6rem,  4vw,   2rem);
+    --text-4xl:  clamp(2.2rem,  6vw,   3rem);
+
+    /* ── Geometry ───────────────────────────────────────────── */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --dur-fast:   150ms;
+    --dur-normal: 280ms;
+    --dur-slow:   500ms;
+  }
+
+  /* Dark Mode Overrides */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --bg-canvas:      oklch(12% 0.02 260);
+      --bg-surface:     oklch(16% 0.02 260);
+      --bg-surface-2:   oklch(20% 0.02 260);
+      --border:         oklch(25% 0.03 260);
+      --text-primary:   oklch(98% 0.01 260);
+      --text-secondary: oklch(75% 0.02 260);
+      --text-muted:     oklch(55% 0.03 260);
+    }
+  }
+
+  [data-theme='dark'] {
+    --bg-canvas:      oklch(12% 0.02 260);
+    --bg-surface:     oklch(16% 0.02 260);
+    --bg-surface-2:   oklch(20% 0.02 260);
+    --border:         oklch(25% 0.03 260);
+    --text-primary:   oklch(98% 0.01 260);
+    --text-secondary: oklch(75% 0.02 260);
+    --text-muted:     oklch(55% 0.03 260);
+  }
+
+  [data-theme='light'] {
+    --bg-canvas:      oklch(98% 0.01 260);
+    --bg-surface:     oklch(100% 0 0);
+    --bg-surface-2:   oklch(95% 0.01 260);
+    --border:         oklch(90% 0.02 260);
+    --text-primary:   oklch(20% 0.02 260);
+    --text-secondary: oklch(45% 0.03 260);
+    --text-muted:     oklch(65% 0.03 260);
+  }
+}

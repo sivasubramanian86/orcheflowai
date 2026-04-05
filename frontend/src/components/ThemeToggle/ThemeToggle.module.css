@@ -1,0 +1,33 @@
+.toggle {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-spring);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  box-shadow: 0 4px 12px oklch(0% 0 0 / 0.1);
+}
+
+.toggle:hover {
+  transform: translateY(-1px) scale(1.05);
+  background: var(--bg-surface);
+  border-color: var(--accent-primary);
+  box-shadow: 0 6px 16px oklch(0% 0 0 / 0.15);
+}
+
+.toggle:active {
+  transform: scale(0.95);
+}
+
+.icon {
+  display: block;
+  animation: rotate-in 0.3s var(--ease-spring);
+}
+
+@keyframes rotate-in {
+  from { transform: rotate(-30deg) scale(0.5); opacity: 0; }
+  to { transform: rotate(0) scale(1); opacity: 1; }
+}

@@ -1,0 +1,19 @@
+Q2 Planning Meeting — April 5, 2026
+Attendees: Siva, Alex, Priya, Raj
+
+Agenda: Q2 roadmap, API readiness, client deliverables
+
+Decisions:
+- Siva to review and finalize the OrcheFlowAI API contract by EOD April 7
+- Alex to deliver the frontend prototype by April 10 for internal review
+- Priya to schedule the client Q2 kickoff call before end of this week
+- Raj to set up the AlloyDB instance and run schema migrations by April 8
+
+Action Items:
+- Siva: Write unit tests for orchestrator agent — target April 9
+- Team: Complete code freeze for demo version by April 11
+- Priya: Draft client presentation using outputs from OrcheFlowAI — due April 12
+
+Parking Lot:
+- Discuss async workflow mode via Pub/Sub in next sprint
+- Evaluate Google Calendar live API integration post-hackathon

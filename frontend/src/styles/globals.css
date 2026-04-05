@@ -1,0 +1,72 @@
+/* =============================================================================
+   OrcheFlowAI — Global Styles
+   CSS @layer for deterministic specificity cascade
+   ============================================================================= */
+
+@layer reset, tokens, base, layout, utilities;
+
+@import './tokens.css';
+
+/* ── @property for animating custom properties natively ────────── */
+@property --glow-opacity { syntax: '<number>'; initial-value: 0.3; inherits: false; }
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  img, video { max-width: 100%; display: block; }
+  button { font-family: inherit; cursor: pointer; border: none; }
+  input, textarea, select { font-family: inherit; }
+}
+
+@layer base {
+  html { font-optical-sizing: auto; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg-canvas);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+
+  /* View Transitions for page-level navigation */
+  ::view-transition-new(root) {
+    animation: fade-in 0.3s var(--ease-smooth) both;
+  }
+  ::view-transition-old(root) {
+    animation: fade-out 0.2s var(--ease-smooth) both;
+  }
+
+  @keyframes fade-in  { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes fade-out { to   { opacity: 0; transform: translateY(-4px); } }
+}
+
+@layer utilities {
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
+  }
+
+  .skip-nav {
+    position: absolute; top: -100%; left: 1rem;
+    background: var(--accent-primary); color: white;
+    padding: 0.5rem 1rem; border-radius: var(--radius-sm);
+    font-weight: 600; z-index: 9999; text-decoration: none;
+  }
+  .skip-nav:focus { top: 1rem; }
+}
+
+/* Respect user motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
