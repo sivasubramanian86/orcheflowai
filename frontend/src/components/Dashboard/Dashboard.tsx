@@ -2,6 +2,7 @@ import React from 'react'
 import { WorkflowForm } from '@/components/WorkflowForm/WorkflowForm'
 import { ResultsPanel } from '@/components/ResultsPanel/ResultsPanel'
 import { AuditLog } from '@/components/AuditLog/AuditLog'
+import { WorkflowRequest } from '@/api/client'
 import styles from './Dashboard.module.css'
 
 interface DashboardProps {
@@ -10,7 +11,7 @@ interface DashboardProps {
   logs: any[];
   result: any;
   error: string | null;
-  onSubmit: (text: string) => void;
+  onSubmit: (req: WorkflowRequest) => Promise<void>;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({ 

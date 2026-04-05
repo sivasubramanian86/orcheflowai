@@ -82,7 +82,10 @@ resource "google_cloud_run_v2_service" "mcp" {
       }
       dynamic "env" {
         for_each = local.shared_env
-        content { name = env.value.name; value = env.value.value }
+        content { 
+          name  = env.value.name
+          value = env.value.value 
+        }
       }
       env {
         name = "DATABASE_URL"
@@ -134,7 +137,10 @@ resource "google_cloud_run_v2_service" "agents" {
       }
       dynamic "env" {
         for_each = local.shared_env
-        content { name = env.value.name; value = env.value.value }
+        content { 
+          name  = env.value.name
+          value = env.value.value 
+        }
       }
       env {
         name  = "MCP_SERVER_URL"
@@ -190,7 +196,10 @@ resource "google_cloud_run_v2_service" "api" {
       }
       dynamic "env" {
         for_each = local.shared_env
-        content { name = env.value.name; value = env.value.value }
+        content { 
+          name  = env.value.name
+          value = env.value.value 
+        }
       }
       env {
         name  = "AGENT_SERVICE_URL"
