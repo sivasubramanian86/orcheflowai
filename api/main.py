@@ -4,6 +4,7 @@ OrcheFlowAI — FastAPI Application Entry Point
 import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -60,3 +61,7 @@ async def health():
         "service": "OrcheFlowAI API",
         "version": "1.0.0",
     }
+    
+# Serve static frontend dashboard last
+if os.path.exists("static/index.html"):
+    app.mount("/", StaticFiles(directory="static", html=True), name="frontend")
