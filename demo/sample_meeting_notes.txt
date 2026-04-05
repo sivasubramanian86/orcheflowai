@@ -1,0 +1,20 @@
+# OrcheFlowAI — Sample Meeting Notes for Agent Verification
+# Scenario: Project Phoenix Kickoff meeting
+
+Date: 2026-04-05
+Participants: Siva (CEO), Architect AI, Product Lead
+
+Discussion:
+1. We need to finalize the OrcheFlowAI multi-agent dashboard by end of this week.
+2. Siva mentioned that GCP deployment is a priority for the upcoming hackathon.
+3. The Agent Mesh needs to support GCS ingestion for large scale document analysis.
+
+Action Items:
+- Architect AI: Implement GCS fetch tool in notes_agent by tomorrow.
+- Product Lead: Prepare the demo script and 4-minute YouTube video by Friday.
+- Siva: Provision the production GCP project and AlloyDB cluster by Thursday afternoon.
+- All: Sync on Thursday morning at 10 AM to review the final UI.
+
+Reference:
+- Project Goal: 99.9% reliability for agentic workflows.
+- Stack: Gemini 2.5 Flash, Google ADK, MCP.
