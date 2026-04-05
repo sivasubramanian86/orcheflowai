@@ -16,6 +16,7 @@ sqlalchemy[asyncio]>=2.0.29
 asyncpg>=0.29.0
 pgvector>=0.2.5
 python-dotenv>=1.0.1
+psycopg2-binary>=2.9.9
 
 # Observability + reliability
 structlog>=24.1.0

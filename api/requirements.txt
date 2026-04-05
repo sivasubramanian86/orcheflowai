@@ -7,9 +7,9 @@ passlib[bcrypt]==1.7.4
 httpx>=0.28.1
 sqlalchemy[asyncio]==2.0.31
 asyncpg==0.29.0
+psycopg2-binary>=2.9.9
 alembic==1.13.2
 python-dotenv==1.0.1
 structlog==24.2.0
 google-cloud-logging==3.10.0
 pgvector==0.3.1
-asyncpg==0.29.0
