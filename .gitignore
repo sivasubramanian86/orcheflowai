@@ -25,6 +25,8 @@ venv/
 env/
 ENV/
 .env.local
+.venv_to_delete_*/
+*.venv*
 
 # ─── Secrets & Credentials (CRITICAL — never commit) ─────────────────────────
 .env
