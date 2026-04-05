@@ -7,7 +7,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from api.routers import workflow, tasks, notes, schedule, audit
+from api.routers import (
+    workflow, tasks, notes, schedule, audit, 
+    canvas, modes, learning
+)
 from api.middleware.logging import StructuredLoggingMiddleware
 
 load_dotenv()
@@ -45,6 +48,9 @@ app.include_router(tasks.router, prefix="/v1/tasks", tags=["Tasks"])
 app.include_router(notes.router, prefix="/v1/notes", tags=["Notes"])
 app.include_router(schedule.router, prefix="/v1/schedule", tags=["Schedule"])
 app.include_router(audit.router, prefix="/v1/audit", tags=["Audit"])
+app.include_router(canvas.router, prefix="/v1/canvas", tags=["Canvas"])
+app.include_router(modes.router, prefix="/v1/modes", tags=["Mode"])
+app.include_router(learning.router, prefix="/v1/learning", tags=["Learning"])
 
 
 @app.get("/v1/health", tags=["Health"])

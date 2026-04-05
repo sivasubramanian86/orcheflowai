@@ -1,0 +1,147 @@
+.container {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-1);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: var(--surface-2);
+  border-color: var(--border-medium);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 140px;
+  background: var(--surface-2);
+  border-right: 1px solid var(--border-subtle);
+  z-index: 10;
+}
+
+.track {
+  height: 80px;
+  display: flex;
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.track:last-child {
+  border-bottom: none;
+}
+
+.trackLabel {
+  width: 140px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  z-index: 11;
+}
+
+.trackContent {
+  flex: 1;
+  position: relative;
+  background-image: 
+    linear-gradient(to right, var(--border-muted) 1px, transparent 1px);
+  background-size: 10% 100%;
+}
+
+.event, .task, .commute, .healthBand {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 32px;
+  border-radius: 6px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: var(--shadow-sm);
+}
+
+.event {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4F46E5;
+  border-left: 4px solid #4F46E5;
+}
+
+.task {
+  width: fit-content;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+  border-left: 4px solid #10B981;
+}
+
+.commute {
+  background: rgba(245, 158, 11, 0.1);
+  color: #F59E0B;
+  border: 1px dashed #F59E0B;
+}
+
+.healthBand {
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: linear-gradient(to right, transparent, rgba(239, 68, 68, 0.05), transparent);
+  color: #EF4444;
+  border: none;
+  font-weight: 700;
+  justify-content: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

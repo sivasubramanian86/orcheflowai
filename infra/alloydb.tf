@@ -30,6 +30,15 @@ resource "google_vpc_access_connector" "connector" {
   project       = var.project_id
   ip_cidr_range = "10.8.0.0/28"
   network       = google_compute_network.orcheflow_vpc.name
+
+  depends_on = [google_project_service.services]
+}
+
+# ── IAM for VPC Connector (Resolves 403s) ────────────────────────────────────
+resource "google_project_iam_member" "vpc_connector_network_user" {
+  project = var.project_id
+  role    = "roles/compute.networkUser"
+  member  = "serviceAccount:service-967518492968@gcp-sa-vpcaccess.iam.gserviceaccount.com"
 }
 
 # ── AlloyDB Cluster ───────────────────────────────────────────────────────────
@@ -47,7 +56,7 @@ resource "google_alloydb_cluster" "orcheflow_db" {
     password = "change-me-in-secret-manager"
   }
 
-  depends_on = [google_service_networking_connection.private_vpc_connection]
+  depends_on = [google_project_service.services, google_service_networking_connection.private_vpc_connection]
 }
 
 resource "google_alloydb_instance" "primary_instance" {

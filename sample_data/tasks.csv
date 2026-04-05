@@ -1,0 +1,5 @@
+title,description,status,priority,due_date,tags
+"Prepare Hackathon Pitch","Finalize the slide deck and demo video for OrcheFlowAI","TODO",1,"2026-04-10",["hackathon","pitch","urgent"]
+"GCP Architecture Security Review","Audit VPC connectors and Secret Manager access policies","IN_PROGRESS",2,"2026-04-06",["devops","security"]
+"Unit Test Agent Mesh","Implement boundary testing for the Orchestrator's step decomposition","TODO",3,"2026-04-08",["testing","qa"]
+"Refactor Data Ingestion","Optimize bulk loading for larger CSV files from GCS","DONE",3,"2026-04-01",["data","backend"]

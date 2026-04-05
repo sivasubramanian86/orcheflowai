@@ -18,3 +18,6 @@ tests/
 evaluation/
 demo/
 infra/
+.venv_to_delete*
+node_modules/
+.vite/

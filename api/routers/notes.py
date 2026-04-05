@@ -23,7 +23,7 @@ async def create_note(body: NoteBody, db: AsyncSession = Depends(get_db)):
     from db.models import Note
     note = Note(
         id=str(uuid.uuid4()),
-        user_id="demo-user",
+        user_id="01948576-a3b2-7c6d-9e0f-1a2b3c4d5e6f",
         title=body.title,
         content=body.content,
         content_type=body.content_type,

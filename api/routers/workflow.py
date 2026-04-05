@@ -65,7 +65,7 @@ async def run_workflow(
     run_id = str(uuid.uuid4())
     run = WorkflowRun(
         id=run_id,
-        user_id="demo-user",  # Replace with JWT-parsed user_id in production
+        user_id="01948576-a3b2-7c6d-9e0f-1a2b3c4d5e6f",  # Replace with JWT-parsed user_id in production
         idempotency_key=body.idempotency_key,
         intent=body.intent,
         status="PENDING",
@@ -84,7 +84,7 @@ async def run_workflow(
                     "run_id": run_id,
                     "intent": body.intent,
                     "payload": body.payload,
-                    "user_id": "demo-user",
+                    "user_id": "01948576-a3b2-7c6d-9e0f-1a2b3c4d5e6f",
                 },
             )
             response.raise_for_status()

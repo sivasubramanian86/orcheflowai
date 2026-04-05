@@ -1,0 +1,14 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'build-mcp'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-mcp:latest', '-f', 'mcp_server/Dockerfile', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'build-api'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-api:latest', '-f', 'api/Dockerfile', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'build-agents'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-agents:latest', '-f', 'agents/Dockerfile', '.']
+images:
+- 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-mcp:latest'
+- 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-api:latest'
+- 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-agents:latest'

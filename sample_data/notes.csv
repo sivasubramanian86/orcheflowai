@@ -1,0 +1,4 @@
+title,content,content_type,tags
+"Architecture Brainstorm","Drafting the 3-tier mesh: API -> Orchestrator -> Tool Agents. Use Gemini 2.5 Flash for speed.","REFERENCE",["arch","brainstorm"]
+"User Interview: CEO","Focused on seamless task delegation from WhatsApp. Needs to be zero-prompt if possible.","TRANSCRIPT",["user-research","ceo"]
+"Product Roadmap 2026","Key pillars: Sovereign AI, MCP ecosystem maturity, and cross-agent collaborative reasoning.","STRATEGY",["roadmap","future"]

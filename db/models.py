@@ -153,3 +153,61 @@ class ToolCallLog(Base):
     error_code: Mapped[Optional[str]] = mapped_column(Text)
     latency_ms: Mapped[Optional[int]] = mapped_column(Integer)
     called_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class UserMode(Base):
+    """Stores the current active personality/constraint of the system per user."""
+
+    __tablename__ = "user_modes"
+
+    user_id: Mapped[str] = mapped_column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    active_mode: Mapped[str] = mapped_column(String(20), default="FOCUS")  # FOCUS, SOCIAL, RECOVERY
+    auto_switch_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
+class HealthSnapshot(Base):
+    """Aggregated metrics from Google Fit for Radar/Timeline Visualization."""
+
+    __tablename__ = "health_snapshots"
+
+    id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True, default=_uuid)
+    user_id: Mapped[str] = mapped_column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"))
+    snapshot_date: Mapped[date] = mapped_column(Date, index=True)
+    steps: Mapped[int] = mapped_column(Integer, default=0)
+    sleep_minutes: Mapped[int] = mapped_column(Integer, default=0)
+    readiness_score: Mapped[int] = mapped_column(Integer, default=80)  # 1-100 derived from biometric delta
+    metrics: Mapped[dict] = mapped_column(JSONB, default=dict)  # HRV, HR, Activity Intensity
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class LearningCapsule(Base):
+    """YouTube-based educational timeboxes."""
+
+    __tablename__ = "learning_capsules"
+
+    id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True, default=_uuid)
+    user_id: Mapped[str] = mapped_column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"))
+    video_id: Mapped[str] = mapped_column(Text)
+    title: Mapped[str] = mapped_column(Text)
+    url: Mapped[str] = mapped_column(Text)
+    topic: Mapped[str] = mapped_column(Text)
+    duration_minutes: Mapped[int] = mapped_column(Integer, default=30)
+    status: Mapped[str] = mapped_column(String(20), default="PLANNED")  # PLANNED, COMPLETED, SKIPPED
+    scheduled_event_id: Mapped[Optional[str]] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class CommuteSegment(Base):
+    """Predictive travel time between calendar events using Maps Distance Matrix."""
+
+    __tablename__ = "commute_segments"
+
+    id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True, default=_uuid)
+    user_id: Mapped[str] = mapped_column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"))
+    event_id: Mapped[Optional[str]] = mapped_column(UUID(as_uuid=False), ForeignKey("calendar_events.id", ondelete="CASCADE"))
+    origin_address: Mapped[str] = mapped_column(Text)
+    destination_address: Mapped[str] = mapped_column(Text)
+    travel_time_minutes: Mapped[int] = mapped_column(Integer)
+    transport_mode: Mapped[str] = mapped_column(String(20), default="DRIVING")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

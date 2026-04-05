@@ -6,23 +6,39 @@ param (
     [string]$DBHost,
     [string]$Database = "orcheflow",
     [string]$User = "orcheflow",
-    [string]$DBPassword = $null,
-    [string]$MigrationPath = "db\migrations\V001__initial_schema.sql"
+    [SecureString]$DBPassword = $null,
+    [string]$MigrationPath = "db\migrations\V*.sql"
 )
 
 Write-Host "🚀 OrcheFlowAI — Running Migrations on $DBHost..." -ForegroundColor Cyan
 
 if ($DBPassword) {
-    $env:PGPASSWORD = $DBPassword
+    # Securely extract plain text for the PGPASSWORD environment variable
+    $Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($DBPassword)
+    try {
+        $env:PGPASSWORD = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($Ptr)
+    } finally {
+        [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($Ptr)
+    }
 }
 
-# Run the SQL migration
-psql -h $DBHost -U $User -d $Database -f $MigrationPath
+# Discover and run migrations in order
+$MigrationFiles = Get-ChildItem -Path "db\migrations\V*.sql" | Sort-Object Name
 
-if ($LASTEXITCODE -eq 0) {
-    Write-OK "Migration successful."
+foreach ($file in $MigrationFiles) {
+    Write-Host "📜 Applying $($file.Name)..." -ForegroundColor Gray
+    psql -h $DBHost -U $User -d $Database -f $file.FullName
+    
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "❌ Migration $($file.Name) failed with exit code $LASTEXITCODE"
+        break
+    }
+}
+
+if ($MigrationFiles.Count -eq 0) {
+    Write-Warning "⚠️ No migration files found in db\migrations\"
 } else {
-    Write-Error "Migration failed with exit code $LASTEXITCODE"
+    Write-Host "✅ All migrations applied successfully." -ForegroundColor Green
 }
 
 # Cleanup env

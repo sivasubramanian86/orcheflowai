@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Sidebar.module.css'
 
-export type ViewType = 'dashboard' | 'about' | 'faq' | 'settings';
+export type ViewType = 'life-canvas' | 'dashboard' | 'run-explorer' | 'quality-radar' | 'learning' | 'about' | 'faq' | 'settings';
 
 interface SidebarProps {
   activeView: ViewType;
@@ -10,7 +10,11 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
   const menuItems = [
+    { id: 'life-canvas', label: 'Life Canvas', icon: '🗓️' },
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+    { id: 'run-explorer', label: 'Run Explorer', icon: '🔍' },
+    { id: 'quality-radar', label: 'Quality Radar', icon: '🎯' },
+    { id: 'learning', label: 'Learning', icon: '📺' },
     { id: 'about', label: 'About', icon: '✨' },
     { id: 'faq', label: 'FAQ', icon: '❓' },
     { id: 'settings', label: 'Settings', icon: '⚙️' },

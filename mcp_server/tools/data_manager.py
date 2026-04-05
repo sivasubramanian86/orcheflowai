@@ -16,6 +16,8 @@ import structlog
 log = structlog.get_logger()
 router = APIRouter()
 
+DEMO_USER_ID = "01948576-a3b2-7c6d-9e0f-1a2b3c4d5e6f"
+
 class IngestBody(BaseModel):
     gcs_uri: str
     target_type: str = "notes"
@@ -52,7 +54,7 @@ async def ingest_from_gcs(body: IngestBody) -> Dict[str, Any]:
                     note = Note(
                         title=row.get("title", "Imported Note"),
                         content=row.get("content", ""),
-                        user_id="demo-user",
+                        user_id=DEMO_USER_ID,
                     )
                     session.add(note)
             elif body.target_type == "tasks":
@@ -62,7 +64,7 @@ async def ingest_from_gcs(body: IngestBody) -> Dict[str, Any]:
                         title=row.get("title", "Imported Task"),
                         description=row.get("description", ""),
                         status=row.get("status", "TODO"),
-                        user_id="demo-user",
+                        user_id=DEMO_USER_ID,
                     )
                     session.add(task)
             await session.commit()
