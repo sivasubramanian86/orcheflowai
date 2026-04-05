@@ -15,6 +15,7 @@ httpx>=0.28.1
 sqlalchemy[asyncio]>=2.0.29
 asyncpg>=0.29.0
 pgvector>=0.2.5
+python-dotenv>=1.0.1
 
 # Observability + reliability
 structlog>=24.1.0
