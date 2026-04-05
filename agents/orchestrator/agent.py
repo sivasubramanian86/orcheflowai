@@ -22,6 +22,7 @@ from agents.task_agent.agent import build_task_agent
 from agents.notes_agent.agent import build_notes_agent
 from agents.schedule_agent.agent import build_schedule_agent
 from agents.workflow_agent.agent import build_workflow_agent
+from agents.data_agent.agent import build_data_agent
 
 log = structlog.get_logger()
 
@@ -38,6 +39,7 @@ Available sub-agents (use them via their agent tools):
 - task_agent: create, update, list, and prioritize tasks
 - schedule_agent: find calendar gaps, block focus time, read events
 - notes_agent: ingest raw notes, extract action items, search knowledge
+- data_agent: ingest bulk data from GCS to AlloyDB, perform complex SQL querying
 - workflow_agent: compile final summary and generate plan documents
 
 Operating rules:
@@ -68,13 +70,14 @@ def build_orchestrator() -> Agent:
     notes_agent = build_notes_agent()
     schedule_agent = build_schedule_agent()
     workflow_agent = build_workflow_agent()
+    data_agent = build_data_agent()
 
     orchestrator = Agent(
         name="orcheflow_orchestrator",
         model=GEMINI_ORCHESTRATOR_MODEL,
         description="Primary coordinator that plans and delegates to specialist sub-agents.",
         instruction=ORCHESTRATOR_SYSTEM_PROMPT,
-        sub_agents=[task_agent, notes_agent, schedule_agent, workflow_agent],
+        sub_agents=[task_agent, notes_agent, schedule_agent, workflow_agent, data_agent],
     )
     return orchestrator
 

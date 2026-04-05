@@ -5,7 +5,7 @@ In production, this would implement the full MCP protocol via SSE transport.
 """
 import os
 from fastapi import FastAPI
-from mcp_server.tools import task_manager, calendar_manager, notes_manager
+from mcp_server.tools import task_manager, calendar_manager, notes_manager, data_manager
 
 app = FastAPI(title="OrcheFlowAI MCP Server", version="1.0.0")
 
@@ -13,6 +13,7 @@ app = FastAPI(title="OrcheFlowAI MCP Server", version="1.0.0")
 app.include_router(task_manager.router, prefix="/tools/task_manager")
 app.include_router(calendar_manager.router, prefix="/tools/calendar_manager")
 app.include_router(notes_manager.router, prefix="/tools/notes_manager")
+app.include_router(data_manager.router, prefix="/tools/data_manager")
 
 
 @app.get("/health")
@@ -35,5 +36,7 @@ async def list_tools():
             "notes_manager.create_note",
             "notes_manager.extract_action_items",
             "notes_manager.search",
+            "data_manager.ingest",
+            "data_manager.query",
         ]
     }

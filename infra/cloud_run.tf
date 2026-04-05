@@ -69,6 +69,11 @@ resource "google_cloud_run_v2_service" "mcp" {
       max_instance_count = 5
     }
 
+    vpc_access {
+      connector = google_vpc_access_connector.connector.id
+      egress    = "ALL_TRAFFIC"
+    }
+
     containers {
       image = "${local.image_base}/orcheflow-mcp:${var.image_tag}"
       resources {
@@ -114,6 +119,11 @@ resource "google_cloud_run_v2_service" "agents" {
     scaling {
       min_instance_count = 0
       max_instance_count = 5
+    }
+
+    vpc_access {
+      connector = google_vpc_access_connector.connector.id
+      egress    = "ALL_TRAFFIC"
     }
 
     containers {
@@ -165,6 +175,11 @@ resource "google_cloud_run_v2_service" "api" {
     scaling {
       min_instance_count = 0
       max_instance_count = 10
+    }
+
+    vpc_access {
+      connector = google_vpc_access_connector.connector.id
+      egress    = "ALL_TRAFFIC"
     }
 
     containers {
