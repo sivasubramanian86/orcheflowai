@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 from api.routers import (
     workflow, tasks, notes, schedule, audit, 
-    canvas, modes, learning
+    canvas, modes, learning, google_auth, location
 )
 from api.middleware.logging import StructuredLoggingMiddleware
 
@@ -52,6 +52,8 @@ app.include_router(audit.router, prefix="/v1/audit", tags=["Audit"])
 app.include_router(canvas.router, prefix="/v1/canvas", tags=["Canvas"])
 app.include_router(modes.router, prefix="/v1/modes", tags=["Mode"])
 app.include_router(learning.router, prefix="/v1/learning", tags=["Learning"])
+app.include_router(google_auth.router, prefix="/v1/auth/google", tags=["Auth"])
+app.include_router(location.router, prefix="/v1/location", tags=["Location"])
 
 
 @app.get("/v1/health", tags=["Health"])

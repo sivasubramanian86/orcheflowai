@@ -1,77 +1,88 @@
+/* =============================================================================
+   NEXUS Cockpit 2026 — Glassmorphism Design System
+   ============================================================================= */
+
 .container {
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  grid-template-rows: auto 1fr;
   gap: 24px;
-  animation: fadeIn 0.4s ease-out;
+  min-height: 100vh;
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  animation: fadeIn 0.8s var(--ease-spring);
 }
 
 .header {
+  grid-column: 1 / -1;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 16px 8px;
+  border-bottom: 1px solid var(--border);
 }
 
 .header h1 {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.controls {
+.agentBadge {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-.btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid var(--border-subtle);
-  background: var(--surface-1);
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+.pulseDot {
+  width: 8px;
+  height: 8px;
+  background: #10B981;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 0 8px #10B981;
 }
 
-.btn:hover {
-  background: var(--surface-2);
-  border-color: var(--border-medium);
+.mainView {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 .timeline {
   display: flex;
   flex-direction: column;
-  background: var(--surface-1);
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-md);
-  position: relative;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 140px;
-  background: var(--surface-2);
-  border-right: 1px solid var(--border-subtle);
-  z-index: 10;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+  backdrop-filter: blur(12px);
 }
 
 .track {
-  height: 80px;
+  height: 90px;
   display: flex;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border);
   position: relative;
+  transition: background 0.3s var(--ease-smooth);
 }
 
-.track:last-child {
-  border-bottom: none;
+.track:hover {
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .trackLabel {
@@ -79,69 +90,183 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  z-index: 11;
+  padding: 0 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  border-right: 1px solid var(--border);
+  z-index: 10;
+  background: rgba(0,0,0,0.1);
 }
 
 .trackContent {
   flex: 1;
   position: relative;
   background-image: 
-    linear-gradient(to right, var(--border-muted) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px);
   background-size: 10% 100%;
 }
 
-.event, .task, .commute, .healthBand {
+.event, .task, .commute {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  height: 32px;
-  border-radius: 6px;
-  padding: 0 12px;
+  height: 38px;
+  border-radius: 8px;
+  padding: 0 14px;
   display: flex;
   align-items: center;
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-shadow: var(--shadow-sm);
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  transition: all 0.4s var(--ease-spring);
+  backdrop-filter: blur(4px);
 }
 
-.event {
-  background: rgba(79, 70, 229, 0.1);
-  color: #4F46E5;
-  border-left: 4px solid #4F46E5;
-}
-
-.task {
-  width: fit-content;
-  background: rgba(16, 185, 129, 0.1);
-  color: #10B981;
-  border-left: 4px solid #10B981;
-}
-
-.commute {
-  background: rgba(245, 158, 11, 0.1);
-  color: #F59E0B;
-  border: 1px dashed #F59E0B;
-}
+.event { background: rgba(99, 102, 241, 0.15); border: 1px solid var(--accent-violet); color: #fff; }
+.task { background: rgba(16, 185, 129, 0.15); border: 1px solid var(--accent-teal); color: #fff; }
+.commute { background: rgba(245, 158, 11, 0.15); border: 1px dashed var(--accent-amber); color: #fff; }
 
 .healthBand {
+  position: absolute;
   left: 0;
   right: 0;
-  height: 48px;
-  background: linear-gradient(to right, transparent, rgba(239, 68, 68, 0.05), transparent);
-  color: #EF4444;
-  border: none;
-  font-weight: 700;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  font-weight: 800;
+  background: linear-gradient(to right, transparent, rgba(239, 68, 68, 0.05), transparent);
+  color: var(--accent-rose);
+  font-size: 12px;
+  letter-spacing: 0.05em;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* AI RECOMMENDATIONS */
+.recommendations {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
+
+.aiHeading {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.recCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  gap: 16px;
+  transition: all 0.3s var(--ease-spring);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.recCard::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--accent-primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.recCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.recCard:hover::after { opacity: 1; }
+
+.recIcon { font-size: 28px; }
+.recBody h3 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.recBody p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+/* AGENT CONSOLE */
+.agentConsole {
+  background: #000;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px);
+  position: sticky;
+  top: 24px;
+}
+
+.consoleHeader {
+  padding: 16px;
+  background: #111;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.statusIndicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 10px #10B981;
+  animation: pulse 2s infinite;
+}
+
+.logArea {
+  flex: 1;
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.logEntry {
+  display: flex;
+  gap: 8px;
+  opacity: 0.8;
+  animation: logSlide 0.3s var(--ease-spring);
+}
+
+.logTime { color: #333; }
+.logAgent { color: var(--accent-teal); font-weight: 700; width: 100px; flex-shrink: 0; }
+.logMsg { color: #ccc; }
+
+/* SKELETONS */
+.skeleton {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #111 25%, #222 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+@keyframes logSlide { from { transform: translateX(-10px); opacity: 0; } to { transform: translateX(0); opacity: 0.8; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }

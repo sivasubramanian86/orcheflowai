@@ -39,9 +39,18 @@ async def get_current_mode(db: AsyncSession = Depends(get_db)):
     
     if not mode:
         # Create default mode if missing for demo
-        mode = UserMode(user_id=user_id, active_mode="FOCUS", auto_switch_enabled=True)
-        db.add(mode)
-        await db.commit()
+        try:
+            mode = UserMode(user_id=user_id, active_mode="FOCUS", auto_switch_enabled=True)
+            db.add(mode)
+            await db.commit()
+            await db.refresh(mode)
+        except Exception:
+            # Handle collision or SQLite sync delay
+            await db.rollback()
+            result = await db.execute(select(UserMode).where(UserMode.user_id == user_id))
+            mode = result.scalar_one_or_none()
+            if not mode:
+                 raise HTTPException(status_code=500, detail="Database sync failed")
     
     return {
         "user_id": user_id,

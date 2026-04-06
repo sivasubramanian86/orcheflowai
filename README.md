@@ -11,7 +11,7 @@ Multi-Agent Productivity Assistant powered by Google ADK + Vertex AI Gemini + MC
 
 ---
 
-## Architecture
+## [Architecture Overview](./infra/ARCHITECTURE.md) | [Technical Stack](./infra/TECHSTACK.md)
 
 ```
 API Service (FastAPI)
@@ -53,6 +53,16 @@ To stop all background services:
 ```powershell
 .\scripts\run_local_dev.ps1 -Stop
 ```
+
+### 4. Project Structure (Reorganized 2026)
+- `api/`: FastAPI Backend & OAuth Routers
+- `frontend/`: React 19 + Vite 6 Dashboard
+- `agents/`: Google ADK Multi-Agent Orchestrator
+- `mcp_server/`: Model Context Protocol tool connectors
+- `infra/`: Terraform, Architecture blueprints & TECHSTACK
+- `scripts/`: Production-grade runners and Deployment pipelines
+- `tools/`: Binary proxies (AlloyDB Auth Proxy)
+- `sample_data/`: Local development databases (SQLite)
 
 ---
 

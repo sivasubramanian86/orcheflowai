@@ -87,7 +87,7 @@ async def get_day_canvas(
                     "start": e.start_time,
                     "end": e.end_time,
                     "type": "MEETING",
-                    "metadata": e.extra_metadata
+                    "metadata": e.extra_metadata or {}
                 } for e in cal_results
             ],
             "tasks": [
@@ -97,18 +97,18 @@ async def get_day_canvas(
                     "start": datetime.combine(target_date, datetime.min.time()),
                     "end": datetime.combine(target_date, datetime.min.time()) + timedelta(minutes=30),
                     "type": "TASK",
-                    "status": t.status,
-                    "metadata": t.extra_metadata
+                    "status": t.status or "PENDING",
+                    "metadata": t.extra_metadata or {}
                 } for t in task_results
             ],
             "commute": [
                 {
                     "id": c.id,
-                    "title": f"Commute: {c.origin_address} to {c.destination_address}",
-                    "start": datetime.now(), # Placeholder
-                    "end": datetime.now() + timedelta(minutes=c.travel_time_minutes),
+                    "title": f"Commute: {c.origin_address or 'Unknown'} to {c.destination_address or 'Unknown'}",
+                    "start": c.created_at or datetime.now(),
+                    "end": (c.created_at or datetime.now()) + timedelta(minutes=c.travel_time_minutes or 0),
                     "type": "COMMUTE",
-                    "metadata": {"mode": c.transport_mode}
+                    "metadata": {"mode": c.transport_mode or "UNKNOWN"}
                 } for c in commute_results
             ],
             "health": {
@@ -116,6 +116,6 @@ async def get_day_canvas(
                 "sleep_minutes": health_result.sleep_minutes if health_result else 0,
                 "readiness": health_result.readiness_score if health_result else 80,
                 "metrics": health_result.metrics if health_result else {}
-            } if health_result else None
+            }
         }
     }

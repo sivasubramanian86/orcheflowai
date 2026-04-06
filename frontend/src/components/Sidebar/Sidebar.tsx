@@ -10,8 +10,8 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
   const menuItems = [
-    { id: 'life-canvas', label: 'Life Canvas', icon: '🗓️' },
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+    { id: 'life-canvas', label: 'Life Canvas', icon: '🗓️' },
     { id: 'run-explorer', label: 'Run Explorer', icon: '🔍' },
     { id: 'quality-radar', label: 'Quality Radar', icon: '🎯' },
     { id: 'learning', label: 'Learning', icon: '📺' },
@@ -23,8 +23,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
   return (
     <nav className={styles.sidebar} aria-label="Main Navigation">
       <div className={styles.logoContainer}>
-        <div className={styles.logoIcon}>⚡</div>
-        <div className={styles.logoText}>OrcheFlow</div>
+        <div className={styles.logoIcon}>💓</div>
+        <div className={styles.logoText}>OrcheFlowAI</div>
       </div>
 
       <ul className={styles.menu}>

@@ -94,6 +94,17 @@ if (-not $SkipInstall) {
     }
 }
 
+# 3.5. DATABASE MIGRATION (Senior Safety Check)
+if (-not $FrontendOnly) {
+    Write-Step "Synchronizing Database Schema..."
+    try {
+        & powershell -File "scripts/migrate_db.ps1" -DBHost "localhost" -Database "orcheflow" -User "orcheflow"
+        Write-OK "Schema up-to-date."
+    } catch {
+        Write-Warning "Migration script failed or psql not found. Continuing anyway (Tables may be missing)."
+    }
+}
+
 # 4. SERVER SPAWNING LOGIC
 function Start-SubApp($title, $dir, $command) {
     $sc = "Set-Location '$dir'; Write-Host '=== $title ===' -ForegroundColor Cyan; $command"

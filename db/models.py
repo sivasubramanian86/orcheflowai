@@ -2,16 +2,42 @@
 OrcheFlowAI — SQLAlchemy ORM Models
 Mirrors the V001 SQL schema exactly.
 """
+import os
 import uuid
 from datetime import datetime, date
 from typing import Optional, List
+
+# Dialect Compatibility Layer — Auto-selects appropriate types
+# This ensures AlloyDB features work in prod, while SQLite 'local_demo.db' works for the hackathon
+IS_LOCAL = "True" == os.getenv("IS_LOCAL_DEV", "False")
+DATABASE_URL = os.getenv("DATABASE_URL", "")
+IS_SQLITE = "sqlite" in DATABASE_URL or not DATABASE_URL
+
+if IS_SQLITE:
+    from sqlalchemy import JSON as SQLiteJSON, String as SQLiteString
+    JSONB = SQLiteJSON
+    # We must use a type that SQLAlchemy understands for create_all()
+    # Mocking ARRAY as JSON directly
+    ARRAY = lambda *args, **kwargs: SQLiteJSON
+    Vector = lambda *args, **kwargs: SQLiteJSON
+    UUID = lambda *args, **kwargs: SQLiteString(36)
+else:
+    from sqlalchemy.dialects.postgresql import UUID as PG_UUID, JSONB as PG_JSONB, ARRAY as PG_ARRAY
+    try:
+        from pgvector.sqlalchemy import Vector as PG_Vector
+    except ImportError:
+        PG_Vector = Text
+    JSONB = PG_JSONB
+    UUID = PG_UUID
+    ARRAY = PG_ARRAY
+    Vector = PG_Vector
+
 from sqlalchemy import (
     String, Text, Integer, Boolean, ForeignKey,
-    DateTime, Date, BigInteger, ARRAY, func
+    DateTime, Date, BigInteger, JSON, func
 )
-from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from pgvector.sqlalchemy import Vector
+
 from db.session import Base
 
 
@@ -26,7 +52,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(Text, unique=True, nullable=False)
     display_name: Mapped[Optional[str]] = mapped_column(Text)
     timezone: Mapped[str] = mapped_column(Text, default="UTC")
-    preferences: Mapped[dict] = mapped_column(JSONB, default=dict)
+    preferences: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
@@ -48,7 +74,7 @@ class Task(Base):
     tags: Mapped[List[str]] = mapped_column(ARRAY(Text), default=list)
     source_note_id: Mapped[Optional[str]] = mapped_column(UUID(as_uuid=False))
     source_event_id: Mapped[Optional[str]] = mapped_column(UUID(as_uuid=False))
-    extra_metadata: Mapped[dict] = mapped_column(JSONB, default=dict)
+    extra_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
@@ -65,7 +91,7 @@ class Note(Base):
     content_type: Mapped[str] = mapped_column(String(20), default="REFERENCE")
     tags: Mapped[List[str]] = mapped_column(ARRAY(Text), default=list)
     embedding: Mapped[Optional[List[float]]] = mapped_column(Vector(768))
-    extra_metadata: Mapped[dict] = mapped_column(JSONB, default=dict)
+    extra_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
@@ -82,9 +108,9 @@ class CalendarEvent(Base):
     start_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     end_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     event_type: Mapped[str] = mapped_column(String(20), default="MEETING")
-    attendees: Mapped[list] = mapped_column(JSONB, default=list)
+    attendees: Mapped[list] = mapped_column(JSON, default=list)
     notes_id: Mapped[Optional[str]] = mapped_column(UUID(as_uuid=False), ForeignKey("notes.id"))
-    extra_metadata: Mapped[dict] = mapped_column(JSONB, default=dict)
+    extra_metadata: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -95,11 +121,11 @@ class WorkflowRun(Base):
     user_id: Mapped[str] = mapped_column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"))
     idempotency_key: Mapped[Optional[str]] = mapped_column(Text, unique=True)
     intent: Mapped[str] = mapped_column(Text, nullable=False)
-    plan: Mapped[Optional[dict]] = mapped_column(JSONB)
+    plan: Mapped[Optional[dict]] = mapped_column(JSON)
     status: Mapped[str] = mapped_column(String(20), default="PENDING")
-    input_payload: Mapped[dict] = mapped_column(JSONB, default=dict)
+    input_payload: Mapped[dict] = mapped_column(JSON, default=dict)
     output_summary: Mapped[Optional[str]] = mapped_column(Text)
-    error_details: Mapped[Optional[dict]] = mapped_column(JSONB)
+    error_details: Mapped[Optional[dict]] = mapped_column(JSON)
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     total_tokens: Mapped[int] = mapped_column(Integer, default=0)
@@ -118,8 +144,8 @@ class WorkflowStep(Base):
     step_name: Mapped[str] = mapped_column(Text, nullable=False)
     agent_name: Mapped[str] = mapped_column(Text, nullable=False)
     status: Mapped[str] = mapped_column(String(20), default="PENDING")
-    input_context: Mapped[Optional[dict]] = mapped_column(JSONB)
-    output_result: Mapped[Optional[dict]] = mapped_column(JSONB)
+    input_context: Mapped[Optional[dict]] = mapped_column(JSON)
+    output_result: Mapped[Optional[dict]] = mapped_column(JSON)
     error_message: Mapped[Optional[str]] = mapped_column(Text)
     started_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
@@ -136,7 +162,7 @@ class AgentAuditLog(Base):
     step_id: Mapped[Optional[str]] = mapped_column(UUID(as_uuid=False), ForeignKey("workflow_steps.id"))
     agent_name: Mapped[str] = mapped_column(Text, nullable=False)
     action: Mapped[str] = mapped_column(Text, nullable=False)
-    details: Mapped[Optional[dict]] = mapped_column(JSONB)
+    details: Mapped[Optional[dict]] = mapped_column(JSON)
     tokens_used: Mapped[Optional[int]] = mapped_column(Integer)
     logged_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
@@ -147,8 +173,8 @@ class ToolCallLog(Base):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     step_id: Mapped[Optional[str]] = mapped_column(UUID(as_uuid=False), ForeignKey("workflow_steps.id"))
     tool_name: Mapped[str] = mapped_column(Text, nullable=False)
-    tool_input: Mapped[Optional[dict]] = mapped_column(JSONB)
-    tool_output: Mapped[Optional[dict]] = mapped_column(JSONB)
+    tool_input: Mapped[Optional[dict]] = mapped_column(JSON)
+    tool_output: Mapped[Optional[dict]] = mapped_column(JSON)
     success: Mapped[bool] = mapped_column(Boolean, nullable=False)
     error_code: Mapped[Optional[str]] = mapped_column(Text)
     latency_ms: Mapped[Optional[int]] = mapped_column(Integer)
@@ -177,7 +203,7 @@ class HealthSnapshot(Base):
     steps: Mapped[int] = mapped_column(Integer, default=0)
     sleep_minutes: Mapped[int] = mapped_column(Integer, default=0)
     readiness_score: Mapped[int] = mapped_column(Integer, default=80)  # 1-100 derived from biometric delta
-    metrics: Mapped[dict] = mapped_column(JSONB, default=dict)  # HRV, HR, Activity Intensity
+    metrics: Mapped[dict] = mapped_column(JSON, default=dict)  # HRV, HR, Activity Intensity
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -211,3 +237,19 @@ class CommuteSegment(Base):
     travel_time_minutes: Mapped[int] = mapped_column(Integer)
     transport_mode: Mapped[str] = mapped_column(String(20), default="DRIVING")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class UserCredential(Base):
+    """Securely stores OAuth 2.0 credentials for external services (Google)."""
+
+    __tablename__ = "user_credentials"
+
+    id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True, default=_uuid)
+    user_id: Mapped[str] = mapped_column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), unique=True)
+    service_name: Mapped[str] = mapped_column(String(50), default="google")
+    access_token: Mapped[str] = mapped_column(Text)
+    refresh_token: Mapped[Optional[str]] = mapped_column(Text)
+    token_expiry: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    scopes: Mapped[List[str]] = mapped_column(ARRAY(Text), default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
