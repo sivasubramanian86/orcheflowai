@@ -17,10 +17,13 @@ from api.middleware.logging import StructuredLoggingMiddleware
 load_dotenv()
 
 
+from db.session import init_db
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: verify DB and downstream services
     print("OrcheFlowAI API starting up...")
+    await init_db()
     yield
     print("OrcheFlowAI API shutting down...")
 
