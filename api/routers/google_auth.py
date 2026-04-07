@@ -126,11 +126,11 @@ async def get_sync_status(db: AsyncSession = Depends(get_db)):
     res = result.first()
     
     if not res:
-        return {"connected": false}
+        return {"connected": False}
         
     user, cred = res
     return {
-        "connected": true,
+        "connected": True,
         "name": user.display_name,
         "email": user.email,
         "last_sync": cred.updated_at,
