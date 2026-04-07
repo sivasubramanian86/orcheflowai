@@ -24,6 +24,26 @@
   border-bottom: 1px solid var(--border);
 }
 
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.headerPill {
+  display: inline-block;
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent-violet);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+
 .header h1 {
   font-size: var(--text-2xl);
   font-weight: 800;
@@ -265,6 +285,78 @@
   animation: shimmer 1.5s infinite;
   border-radius: 8px;
 }
+
+/* INFO GRAPHICS CHARTS */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.chartCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.chartBody {
+  height: 180px;
+  width: 100%;
+}
+
+.recIconWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.05);
+  flex-shrink: 0;
+}
+
+.recScore {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  background: rgba(0,0,0,0.2);
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+.impactBadge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.impactBadge[data-impact="High"] { background: rgba(16, 185, 129, 0.15); color: #10B981; }
+.impactBadge[data-impact="Medium"] { background: rgba(59, 130, 246, 0.15); color: #3B82F6; }
 
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }

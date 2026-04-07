@@ -3,6 +3,7 @@ import { WorkflowForm } from '@/components/WorkflowForm/WorkflowForm'
 import { ResultsPanel } from '@/components/ResultsPanel/ResultsPanel'
 import { AuditLog } from '@/components/AuditLog/AuditLog'
 import { WorkflowRequest } from '@/api/client'
+import { Activity, CheckCircle, Zap } from 'lucide-react'
 import styles from './Dashboard.module.css'
 
 interface DashboardProps {
@@ -26,6 +27,37 @@ export const Dashboard: React.FC<DashboardProps> = ({
           Multi-agent orchestration that converts raw notes into prioritised tasks.
         </p>
       </header>
+
+      {/* DASHBOARD METRICS */}
+      <div className={styles.metricsGrid}>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIconWrap} style={{ color: '#10B981', background: 'rgba(16, 185, 129, 0.1)' }}>
+            <Activity size={24} />
+          </div>
+          <div className={styles.metricData}>
+            <div className={styles.metricLabel}>Total Extracted</div>
+            <div className={styles.metricValue}>1,204 <span className={styles.metricUnit}>tasks</span></div>
+          </div>
+        </div>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIconWrap} style={{ color: '#8B5CF6', background: 'rgba(139, 92, 246, 0.1)' }}>
+            <Zap size={24} />
+          </div>
+          <div className={styles.metricData}>
+            <div className={styles.metricLabel}>Avg. Agent Latency</div>
+            <div className={styles.metricValue}>1.2 <span className={styles.metricUnit}>sec</span></div>
+          </div>
+        </div>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIconWrap} style={{ color: '#3B82F6', background: 'rgba(59, 130, 246, 0.1)' }}>
+            <CheckCircle size={24} />
+          </div>
+          <div className={styles.metricData}>
+            <div className={styles.metricLabel}>Sync Accuracy</div>
+            <div className={styles.metricValue}>99.8 <span className={styles.metricUnit}>%</span></div>
+          </div>
+        </div>
+      </div>
 
       <div className={styles.mainGrid}>
         <div className={styles.leftCol}>

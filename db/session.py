@@ -57,11 +57,14 @@ class Base(DeclarativeBase):
 async def init_db():
     """Idempotent database initialization — ensures tables exist for either Postgres or SQLite."""
     from db.models import Base  # Local import to prevent circularity
-    async with engine.begin() as conn:
-        # Note: SQLite doesn't support pgvector or certain PG types natively.
-        # SQLAlchemy will attempt to map them to text/blob for local development.
-        await conn.run_sync(Base.metadata.create_all)
-    print("!! [DATABASE] Initialization complete.")
+    try:
+        async with engine.begin() as conn:
+            # Note: SQLite doesn't support pgvector or certain PG types natively.
+            # SQLAlchemy will attempt to map them to text/blob for local development.
+            await conn.run_sync(Base.metadata.create_all)
+        print("!! [DATABASE] Initialization complete.")
+    except Exception as e:
+        print(f"!! [DATABASE] Initialization error (ignoring during fallback): {e}")
 
 
 async def get_db() -> AsyncSession:

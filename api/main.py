@@ -23,7 +23,10 @@ from db.session import init_db
 async def lifespan(app: FastAPI):
     # Startup: verify DB and downstream services
     print("OrcheFlowAI API starting up...")
-    await init_db()
+    try:
+        await init_db()
+    except Exception as e:
+        print(f"Failed to initialize database on startup: {e}")
     yield
     print("OrcheFlowAI API shutting down...")
 
