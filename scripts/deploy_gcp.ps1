@@ -54,7 +54,7 @@ if ($repos -notcontains "projects/$PROJECT_ID/locations/$REGION/repositories/$RE
 
 # ── STEP 1: Build & Push Images ──────────────────────────────────────
 $services = @(
-    @{ name = "mcp"; path = "mcp"; file = "mcp/Dockerfile" },
+    @{ name = "mcp"; path = "mcp_server"; file = "mcp_server/Dockerfile" },
     @{ name = "agents"; path = "agents"; file = "agents/Dockerfile" },
     @{ name = "api"; path = "api"; file = "api/Dockerfile" }
 )
@@ -87,13 +87,13 @@ terraform apply -auto-approve `
 # ── STEP 3: Summary ──────────────────────────────────────────────────
 Write-Step "Deployment Complete!"
 $api_url = terraform output -raw api_url
-Write-Host ("=" * 48) -ForegroundColor Cyan
+$mcp_url = terraform output -raw mcp_url
+$agents_url = terraform output -raw agents_url
+
 Write-Host "  OrcheFlowAI — Production URLs" -ForegroundColor White
-Write-Host ("=" * 48) -ForegroundColor Cyan
 Write-Host "  API:       $api_url" -ForegroundColor Green
 Write-Host "  Docs:      $api_url/docs" -ForegroundColor Green
-Write-Host "  MCP:       $(terraform output -raw mcp_url)" -ForegroundColor Gray
-Write-Host "  Agents:    $(terraform output -raw agents_url)" -ForegroundColor Gray
-Write-Host ("=" * 48) -ForegroundColor Cyan
+Write-Host "  MCP:       $mcp_url" -ForegroundColor Gray
+Write-Host "  Agents:    $agents_url" -ForegroundColor Gray
 
 Set-Location $PROJ

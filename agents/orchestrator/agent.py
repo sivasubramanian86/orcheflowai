@@ -23,6 +23,7 @@ from agents.notes_agent.agent import build_notes_agent
 from agents.schedule_agent.agent import build_schedule_agent
 from agents.workflow_agent.agent import build_workflow_agent
 from agents.data_agent.agent import build_data_agent
+from agents.environment_agent.agent import build_environment_agent
 
 log = structlog.get_logger()
 
@@ -39,6 +40,7 @@ Available sub-agents (use them via their agent tools):
 - task_agent: create, update, list, and prioritize tasks
 - schedule_agent: find calendar gaps, block focus time, read events
 - notes_agent: ingest raw notes, extract action items, search knowledge
+- environment_agent: get real-time weather and recovery window statuses
 - data_agent: ingest bulk data from GCS to AlloyDB, perform complex SQL querying
 - workflow_agent: compile final summary and generate plan documents
 
@@ -47,14 +49,16 @@ Operating rules:
 - Always end by calling workflow_agent to summarize all results
 - Pass only the minimal required context to each sub-agent
 - If a sub-agent returns an error, log it and continue with remaining steps
-- Return a final structured JSON with keys: plan_executed, tasks_created, calendar_blocks, summary
+- Return a final structured JSON with keys: plan_executed, tasks_created, calendar_blocks, environmental_window, summary
+- MANDATORY: Include 'Actionable recommendations' and 'Predictions' in the summary.
 
 Response format (final answer only):
 {
   "plan_executed": ["step1", "step2", ...],
   "tasks_created": [...],
   "calendar_blocks": [...],
-  "summary": "3-sentence plain-English summary of what was accomplished",
+  "environmental_window": {"temp": 0, "condition": "...", "insight": "...", "status": "..."},
+  "summary": "3-sentence plain-English summary. MUST include 1 predictive insight and 2 actionable recommendations.",
   "tokens_used": 0,
   "status": "COMPLETED"
 }
@@ -71,13 +75,14 @@ def build_orchestrator() -> Agent:
     schedule_agent = build_schedule_agent()
     workflow_agent = build_workflow_agent()
     data_agent = build_data_agent()
+    environment_agent = build_environment_agent()
 
     orchestrator = Agent(
         name="orcheflow_orchestrator",
         model=GEMINI_ORCHESTRATOR_MODEL,
         description="Primary coordinator that plans and delegates to specialist sub-agents.",
         instruction=ORCHESTRATOR_SYSTEM_PROMPT,
-        sub_agents=[task_agent, notes_agent, schedule_agent, workflow_agent, data_agent],
+        sub_agents=[task_agent, notes_agent, schedule_agent, workflow_agent, data_agent, environment_agent],
     )
     return orchestrator
 

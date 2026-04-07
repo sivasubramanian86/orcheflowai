@@ -18,3 +18,4 @@ google-auth-oauthlib==1.2.1
 googlemaps==4.10.0
 google-auth>=2.29.0
 google-cloud-aiplatform>=1.49.0
+aiosqlite==0.20.0

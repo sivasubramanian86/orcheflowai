@@ -25,10 +25,10 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 
 # ── Serverless VPC Access (Cloud Run to AlloyDB) ──────────────────────────────
 resource "google_vpc_access_connector" "connector" {
-  name          = "orcheflow-vpc-conn"
+  name          = "orcheflow-conn-v1"
   region        = var.region
   project       = var.project_id
-  ip_cidr_range = "10.8.0.0/28"
+  ip_cidr_range = "10.8.2.0/28"
   network       = google_compute_network.orcheflow_vpc.name
 
   depends_on = [google_project_service.services]
