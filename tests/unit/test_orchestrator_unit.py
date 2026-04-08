@@ -22,7 +22,7 @@ class TestIntentClassification:
         ),
         (
             "Summarize all my notes from last week and create a plan",
-            ["notes_agent", "task_agent", "schedule_agent", "workflow_agent"]
+            ["notes_agent", "workflow_agent"]
         ),
     ])
     def test_intent_to_agent_mapping(self, intent: str, expected_agents: list):

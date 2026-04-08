@@ -11,7 +11,7 @@ class TestFindFreeSlots:
     @pytest.mark.asyncio
     async def test_gaps_detected_between_meetings(self):
         """Should find gap between 10:00-11:00 when meetings are 09:00-10:00 and 11:00-12:00."""
-        from mcp.tools.calendar_manager import find_free_slots
+        from mcp_server.tools.calendar_manager import find_free_slots
 
         mock_db = AsyncMock()
         today = date.today().isoformat()
@@ -24,7 +24,7 @@ class TestFindFreeSlots:
             ]
         }
 
-        with patch("mcp.tools.calendar_manager.list_events", new=AsyncMock(return_value=mock_events)):
+        with patch("mcp_server.tools.calendar_manager.list_events", new=AsyncMock(return_value=mock_events)):
             result = await find_free_slots(date=today, min_duration_minutes=30, db=mock_db)
 
         gaps = result["gaps"]
@@ -37,7 +37,7 @@ class TestFindFreeSlots:
     @pytest.mark.asyncio
     async def test_no_gaps_when_fully_booked(self):
         """Should return 0 gaps when calendar is fully booked 09:00-18:00."""
-        from mcp.tools.calendar_manager import find_free_slots
+        from mcp_server.tools.calendar_manager import find_free_slots
 
         mock_db = AsyncMock()
         today = date.today().isoformat()
@@ -46,7 +46,7 @@ class TestFindFreeSlots:
             "events": [{"start": f"{today}T09:00:00", "end": f"{today}T18:00:00", "title": "All day"}]
         }
 
-        with patch("mcp.tools.calendar_manager.list_events", new=AsyncMock(return_value=mock_events)):
+        with patch("mcp_server.tools.calendar_manager.list_events", new=AsyncMock(return_value=mock_events)):
             result = await find_free_slots(date=today, min_duration_minutes=90, db=mock_db)
 
         assert result["gaps"] == []
@@ -54,13 +54,13 @@ class TestFindFreeSlots:
     @pytest.mark.asyncio
     async def test_full_day_free_when_no_events(self):
         """Should return entire workday as gap when no events."""
-        from mcp.tools.calendar_manager import find_free_slots
+        from mcp_server.tools.calendar_manager import find_free_slots
 
         mock_db = AsyncMock()
         today = date.today().isoformat()
         mock_events = {"date": today, "events": []}
 
-        with patch("mcp.tools.calendar_manager.list_events", new=AsyncMock(return_value=mock_events)):
+        with patch("mcp_server.tools.calendar_manager.list_events", new=AsyncMock(return_value=mock_events)):
             result = await find_free_slots(
                 date=today, min_duration_minutes=90,
                 work_start_hour=9, work_end_hour=18, db=mock_db

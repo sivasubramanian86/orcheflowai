@@ -40,7 +40,7 @@ class TestCreateTask:
     @pytest.mark.asyncio
     async def test_create_task_happy_path(self, mock_db, sample_task_body):
         """Should create task with all fields set correctly."""
-        from mcp.tools.task_manager import create_task
+        from mcp_server.tools.task_manager import create_task
 
         mock_task = MagicMock()
         mock_task.id = "task-123"
@@ -51,7 +51,7 @@ class TestCreateTask:
         mock_task.created_at.isoformat.return_value = "2026-04-05T00:00:00"
         mock_db.refresh.side_effect = lambda obj: setattr(obj, "id", "task-123")
 
-        with patch("mcp.tools.task_manager.Task", return_value=mock_task):
+        with patch("mcp_server.tools.task_manager.Task", return_value=mock_task):
             result = await create_task(sample_task_body, db=mock_db)
 
         assert mock_db.add.called
@@ -69,7 +69,7 @@ class TestCreateTask:
             source_note_id = None
             user_id = "demo-user"
 
-        from mcp.tools.task_manager import create_task
+        from mcp_server.tools.task_manager import create_task
         mock_task = MagicMock()
         mock_task.id = "task-456"
         mock_task.status = "TODO"
@@ -77,7 +77,7 @@ class TestCreateTask:
         mock_task.due_date = None
         mock_task.created_at.isoformat.return_value = "2026-04-05T00:00:00"
 
-        with patch("mcp.tools.task_manager.Task", return_value=mock_task):
+        with patch("mcp_server.tools.task_manager.Task", return_value=mock_task):
             result = await create_task(BodyNoDueDate(), db=mock_db)
 
         assert mock_db.commit.called
@@ -89,7 +89,7 @@ class TestPrioritizeTasks:
     @pytest.mark.asyncio
     async def test_urgent_task_ranks_first(self):
         """P1 task due tomorrow should rank above P3 task due in 7 days."""
-        from mcp.tools.task_manager import prioritize_tasks, PrioritizeRequest
+        from mcp_server.tools.task_manager import prioritize_tasks, PrioritizeRequest
 
         tomorrow = str(date.today() + timedelta(days=1))
         next_week = str(date.today() + timedelta(days=7))
@@ -104,7 +104,7 @@ class TestPrioritizeTasks:
     @pytest.mark.asyncio
     async def test_no_due_date_ranks_last(self):
         """Task with no due date should rank below one with a due date."""
-        from mcp.tools.task_manager import prioritize_tasks, PrioritizeRequest
+        from mcp_server.tools.task_manager import prioritize_tasks, PrioritizeRequest
 
         in_3_days = str(date.today() + timedelta(days=3))
         body = PrioritizeRequest(tasks=[
@@ -118,6 +118,6 @@ class TestPrioritizeTasks:
     @pytest.mark.asyncio
     async def test_empty_task_list(self):
         """Empty input should return empty output without error."""
-        from mcp.tools.task_manager import prioritize_tasks, PrioritizeRequest
+        from mcp_server.tools.task_manager import prioritize_tasks, PrioritizeRequest
         result = await prioritize_tasks(PrioritizeRequest(tasks=[]))
         assert result["tasks"] == []

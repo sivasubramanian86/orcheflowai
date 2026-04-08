@@ -9,10 +9,10 @@ import re
 from typing import Final
 
 _ROUTING_RULES: Final[list[tuple[str, str]]] = [
-    (r"\b(note|meeting|transcript|brain.?dump|capture|raw)\b", "notes_agent"),
-    (r"\b(task|todo|action.?item|prioriti|backlog|assign|deliverable)\b", "task_agent"),
-    (r"\b(schedul|calendar|block|focus.?time|slot|book)\b", "schedule_agent"),
-    (r"\b(plan|summar|compile|overview|report|organiz)\b", "workflow_agent"),
+    (r"\b(notes?|meetings?|transcripts?|brain.?dump|capture|raw)\b", "notes_agent"),
+    (r"\b(tasks?|todos?|action.?items?|prioriti[sz]e?|backlogs?|assign|deliverables?)\b", "task_agent"),
+    (r"\b(schedul(e|ing)|calendars?|blocks?|focus.?times?|slots?|books?)\b", "schedule_agent"),
+    (r"\b(plans?|summari[sz]e?|compile|overview|reports?|organis[ze]d?)\b", "workflow_agent"),
 ]
 
 _ORDER: Final[list[str]] = ["notes_agent", "task_agent", "schedule_agent", "workflow_agent"]
