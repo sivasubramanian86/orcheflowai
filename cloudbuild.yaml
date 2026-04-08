@@ -1,41 +1,17 @@
 steps:
-# 1. Build Container Images
-- name: 'gcr.io/cloud-builders/docker'
-  id: 'build-mcp'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-mcp:latest', '-f', 'mcp_server/Dockerfile', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  id: 'build-api'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-api:latest', '-f', 'api/Dockerfile', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  id: 'build-agents'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-agents:latest', '-f', 'agents/Dockerfile', '.']
+  # Build API (requires both frontend and api context)
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/orcheflow/orcheflow-api:latest', '-f', 'api/Dockerfile', '.']
 
-# 2. Push to Artifact Registry
-- name: 'gcr.io/cloud-builders/docker'
-  id: 'push-mcp'
-  args: ['push', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-mcp:latest']
-- name: 'gcr.io/cloud-builders/docker'
-  id: 'push-api'
-  args: ['push', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-api:latest']
-- name: 'gcr.io/cloud-builders/docker'
-  id: 'push-agents'
-  args: ['push', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-agents:latest']
+  # Build Agents
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/orcheflow/orcheflow-agents:latest', '-f', 'agents/Dockerfile', '.']
 
-# 3. Deploy to Cloud Run (Serverless Update)
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  id: 'deploy-mcp'
-  entrypoint: 'gcloud'
-  args: ['run', 'deploy', 'orcheflow-mcp', '--image', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-mcp:latest', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  id: 'deploy-agents'
-  entrypoint: 'gcloud'
-  args: ['run', 'deploy', 'orcheflow-agents', '--image', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-agents:latest', '--region', 'us-central1', '--platform', 'managed', '--no-allow-unauthenticated']
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  id: 'deploy-api'
-  entrypoint: 'gcloud'
-  args: ['run', 'deploy', 'orcheflow-api', '--image', 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-api:latest', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
+  # Build MCP
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/orcheflow/orcheflow-mcp:latest', '-f', 'mcp_server/Dockerfile', '.']
 
-images:
-- 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-mcp:latest'
-- 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-api:latest'
-- 'us-central1-docker.pkg.dev/genai-apac-2026-491004/orcheflow/orcheflow-agents:latest'
+images: 
+  - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/orcheflow/orcheflow-api:latest'
+  - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/orcheflow/orcheflow-agents:latest'
+  - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/orcheflow/orcheflow-mcp:latest'

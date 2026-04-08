@@ -61,7 +61,7 @@ async def run_adk_agent(
         session_service=session_service,
     )
 
-    from google.adk.types import Content, Part
+    from google.genai.types import Content, Part
     user_content = Content(role="user", parts=[Part(text=message)])
 
     final_response = ""

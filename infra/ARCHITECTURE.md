@@ -52,11 +52,22 @@ graph TD
 - **AI Recommendations**:
     - Gemini 2.5 Flash correlates user focus mode (e.g., RECOVERY) with nearby "quiet spots" or upcoming travel slots to suggest tour destinations.
 
-### C. Secret Management & IAM
-- **Secret Manager**: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_MAPS_API_KEY` are NOT in `.env`. They are fetched from Secret Manager at runtime.
+### C. Secret Management, IAM & Proxy Networking
+- **Secret Manager**: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_MAPS_API_KEY` are fetched from Secret Manager at runtime.
 - **IAM Roles**:
     - `roles/secretmanager.secretAccessor` (Applied to Cloud Run Service Account).
     - `roles/aiplatform.user` (For Vertex AI access).
+
+### 4. Regional Affinity & Networking
+*   **Region:** `asia-southeast1` (Singapore) used for all components to minimize latency and satisfy AlloyDB VPC requirements.
+*   **VPC Connector:** `orcheflow-vpc-conn` enables private IP communication between Cloud Run and AlloyDB.
+*   **Firewall:** Explicit ingress rules (`allow-internal-orcheflow`) permit port 5432 traffic from the VPC Connector range.
+*   **TLS termination:** Handled by Cloud Run Load Balancer; backend code dynamically upgrades callback URIs to `https`.
+
+### 5. Production Hardening (Secret Management)
+*   **Stripped Credentials:** Backend automatically strips whitespace/newlines from Secret Manager values to prevent `invalid_client` OAuth errors.
+*   **Dynamic Callback:** OAuth redirect URIs are dynamically generated based on the request host to avoid environment mismatch.
+*   **Auto-Fallback Profile:** In case of catastrophic regional failure, the system automatically detects connectivity issues and falls back to a localized SQLite instance for high-availability hackathon demo stability.
 
 ## 3. Security Quality Gates
 | Feature | Security Measure |

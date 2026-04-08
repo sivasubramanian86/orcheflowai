@@ -17,7 +17,7 @@
 $ErrorActionPreference = "Stop"
 $PROJ = "D:\Siva\Books\CAREER\HACKATHON\Gen_AI_APAC_2026\OrcheFlowAI"
 $PROJECT_ID = "genai-apac-2026-491004"
-$REGION = "us-central1"
+$REGION = "asia-southeast1"
 $REPO = "orcheflow"
 $IMAGE_TAG = "latest"
 
@@ -78,11 +78,7 @@ Set-Location (Join-Path $PROJ "infra")
 terraform init -reconfigure # Using reconfigure to ensure backend GCS is picked up
 
 Write-Step "Applying Terraform plan..."
-terraform apply -auto-approve `
-    -var="project_id=$PROJECT_ID" `
-    -var="region=$REGION" `
-    -var="image_tag=$IMAGE_TAG" `
-    -var="repo=$REPO"
+terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="image_tag=$IMAGE_TAG" -var="repo=$REPO"
 
 # ── STEP 3: Summary ──────────────────────────────────────────────────
 Write-Step "Deployment Complete!"
@@ -90,10 +86,11 @@ $api_url = terraform output -raw api_url
 $mcp_url = terraform output -raw mcp_url
 $agents_url = terraform output -raw agents_url
 
-Write-Host "  OrcheFlowAI — Production URLs" -ForegroundColor White
-Write-Host "  API:       $api_url" -ForegroundColor Green
-Write-Host "  Docs:      $api_url/docs" -ForegroundColor Green
-Write-Host "  MCP:       $mcp_url" -ForegroundColor Gray
-Write-Host "  Agents:    $agents_url" -ForegroundColor Gray
+Write-Host "  OrcheFlowAI Production URLs"
+Write-Host "  API:       $api_url"
+Write-Host "  Docs:      $api_url/docs"
+Write-Host "  MCP:       $mcp_url"
+Write-Host "  Agents:    $agents_url"
 
 Set-Location $PROJ
+

@@ -20,13 +20,14 @@ router = APIRouter()
 
 # SCENARIO: Hackathon / Local Dev
 # In production, these would be fetched from GCP Secret Manager
+# Redirect URI is dynamically set during requests
 CLIENT_CONFIG = {
     "web": {
-        "client_id": os.getenv("GOOGLE_CLIENT_ID"),
-        "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+        "client_id": (os.getenv("GOOGLE_CLIENT_ID") or "").strip(),
+        "client_secret": (os.getenv("GOOGLE_CLIENT_SECRET") or "").strip(),
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
-        "redirect_uris": [os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8000/v1/auth/google/callback")]
+        "redirect_uris": ["http://placeholder"]
     }
 }
 
@@ -39,10 +40,12 @@ SCOPES = [
 ]
 
 @router.get("/login")
-async def login():
+async def login(request: Request):
     """Initiates Google OAuth 2.0 flow."""
     flow = Flow.from_client_config(CLIENT_CONFIG, scopes=SCOPES)
-    flow.redirect_uri = CLIENT_CONFIG["web"]["redirect_uris"][0]
+    # Dynamically inject the callback url to avoid environment variable mismatch
+    redirect_uri = str(request.url_for("callback")).replace("http://", "https://") if "run.app" in str(request.url) else str(request.url_for("callback"))
+    flow.redirect_uri = redirect_uri
     
     authorization_url, state = flow.authorization_url(
         access_type="offline",
@@ -58,10 +61,13 @@ async def callback(request: Request, db: AsyncSession = Depends(get_db)):
     # In a real app, verify the 'state' from cookie
     
     flow = Flow.from_client_config(CLIENT_CONFIG, scopes=SCOPES)
-    flow.redirect_uri = CLIENT_CONFIG["web"]["redirect_uris"][0]
+    redirect_uri = str(request.url_for("callback")).replace("http://", "https://") if "run.app" in str(request.url) else str(request.url_for("callback"))
+    flow.redirect_uri = redirect_uri
     
     try:
-        flow.fetch_token(authorization_response=str(request.url))
+        # Force HTTPS because Cloud Run TLS termination makes request.url look like HTTP to Uvicorn
+        auth_response = str(request.url).replace("http://", "https://")
+        flow.fetch_token(authorization_response=auth_response)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to fetch token: {str(e)}")
 
@@ -109,8 +115,9 @@ async def callback(request: Request, db: AsyncSession = Depends(get_db)):
     
     await db.commit()
     
-    # Redirect back to frontend
-    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
+    # Redirect back to frontend dynamically
+    frontend_url = str(request.base_url).replace("http://", "https://") if "run.app" in str(request.url) else str(request.base_url)
+    frontend_url = frontend_url.rstrip("/")
     return RedirectResponse(f"{frontend_url}/canvas?sync=success")
 
 @router.get("/status")

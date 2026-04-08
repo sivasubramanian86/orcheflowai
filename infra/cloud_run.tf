@@ -11,7 +11,7 @@ terraform {
 }
 
 variable "project_id"  { default = "genai-apac-2026-491004" }
-variable "region"      { default = "us-central1" }
+variable "region"      { default = "asia-southeast1" }
 variable "image_tag"   { default = "latest" }
 variable "repo"        { default = "orcheflow" }
 
@@ -219,6 +219,24 @@ resource "google_cloud_run_v2_service" "api" {
         value_source {
           secret_key_ref {
             secret  = "orcheflow-jwt-secret"
+            version = "latest"
+          }
+        }
+      }
+      env {
+        name = "GOOGLE_CLIENT_ID"
+        value_source {
+          secret_key_ref {
+            secret  = "orcheflow-google-client-id"
+            version = "latest"
+          }
+        }
+      }
+      env {
+        name = "GOOGLE_CLIENT_SECRET"
+        value_source {
+          secret_key_ref {
+            secret  = "orcheflow-google-client-secret"
             version = "latest"
           }
         }

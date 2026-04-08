@@ -9,6 +9,15 @@ from agents.orchestrator.agent import run_orchestration
 app = FastAPI(title="OrcheFlowAI Agent Service", version="1.0.0")
 
 
+@app.get("/")
+async def root():
+    return {
+        "message": "OrcheFlowAI Agent Service Mesh is active.",
+        "status": "ready",
+        "docs": "/docs"
+    }
+
+
 class OrchestrateRequest(BaseModel):
     run_id: str
     intent: str

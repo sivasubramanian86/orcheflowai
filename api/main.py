@@ -70,6 +70,25 @@ async def health():
         "version": "1.0.0",
     }
     
-# Serve static frontend dashboard last
-if os.path.exists("static/index.html"):
-    app.mount("/", StaticFiles(directory="static", html=True), name="frontend")
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi import Request
+
+# Serve static frontend dashboard with SPA support
+@app.get("/{full_path:path}", include_in_schema=False)
+async def catch_all(request: Request, full_path: str):
+    # 1. API routes should not be caught here if they are matched by routers above
+    # but if they reach here, it's a genuine 404 for an API endpoint
+    if full_path.startswith("v1/"):
+        return JSONResponse(status_code=404, content={"detail": "API endpoint not found"})
+    
+    # 2. Check if a physical file exists in static/ (for assets, icons, etc.)
+    static_file = os.path.join("static", full_path)
+    if os.path.isfile(static_file):
+        return FileResponse(static_file)
+        
+    # 3. Fallback to index.html for SPA client-side routing
+    index_path = os.path.join("static", "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+        
+    return JSONResponse(status_code=404, content={"detail": "Not Found"})

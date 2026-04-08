@@ -13,19 +13,19 @@ log = structlog.get_logger()
 GCP_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT", "genai-apac-2026-491004")
 GCP_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
 
-# ADK-compatible model string format (skill 11: vertex-ai prefix required for ADK)
-ORCHESTRATOR_MODEL = os.getenv("GEMINI_ORCHESTRATOR_MODEL", "vertex-ai:gemini-2.5-flash")
-SUBAGENT_MODEL     = os.getenv("GEMINI_SUBAGENT_MODEL",     "vertex-ai:gemini-2.0-flash")
+# ADK-compatible model string format (No prefix needed for ADK 1.x google provider)
+ORCHESTRATOR_MODEL = os.getenv("GEMINI_ORCHESTRATOR_MODEL", "gemini-1.5-flash-002")
+SUBAGENT_MODEL     = os.getenv("GEMINI_SUBAGENT_MODEL",     "gemini-1.5-flash-002")
 
-# Vertex AI raw model IDs for direct SDK calls (notes_manager extraction)
-ORCHESTRATOR_MODEL_RAW = "gemini-2.5-flash"
-SUBAGENT_MODEL_RAW     = "gemini-2.0-flash"
+# Vertex AI raw model IDs for direct SDK calls
+ORCHESTRATOR_MODEL_RAW = "gemini-1.5-flash-002"
+SUBAGENT_MODEL_RAW     = "gemini-1.5-flash-002"
 
 # Fallback hierarchy (skill 11: primary → fallback → cross-region)
 MODEL_FALLBACK_CHAIN = [
-    "gemini-2.5-flash",
     "gemini-2.0-flash",
     "gemini-1.5-flash-002",
+    "gemini-1.5-pro-002",
 ]
 
 

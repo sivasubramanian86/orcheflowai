@@ -25,3 +25,25 @@ resource "google_secret_manager_secret_version" "jwt_v1" {
   secret      = google_secret_manager_secret.jwt_secret.id
   secret_data = "orcheflow-demo-secret-2026-key"
 }
+
+resource "google_secret_manager_secret" "google_client_id" {
+  secret_id = "orcheflow-google-client-id"
+  project   = var.project_id
+  replication { auto {} }
+}
+
+resource "google_secret_manager_secret" "google_client_secret" {
+  secret_id = "orcheflow-google-client-secret"
+  project   = var.project_id
+  replication { auto {} }
+}
+
+resource "google_secret_manager_secret_version" "google_client_id_v1" {
+  secret      = google_secret_manager_secret.google_client_id.id
+  secret_data = var.google_client_id
+}
+
+resource "google_secret_manager_secret_version" "google_client_secret_v1" {
+  secret      = google_secret_manager_secret.google_client_secret.id
+  secret_data = var.google_client_secret
+}

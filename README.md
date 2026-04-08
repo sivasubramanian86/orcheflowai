@@ -1,7 +1,7 @@
 # OrcheFlowAI
-**Orchestrate your flow. Let agents do the rest.**
+**Eliminate the 'Cognitive Tax'. Let agents do the rest.**
 
-Multi-Agent Productivity Assistant powered by Google ADK + Vertex AI Gemini + MCP tools.
+OrcheFlowAI is a high-performance **Multi-Agent Intelligence Mesh** designed to eliminate the mental friction of modern tool-switching. Acting as your **Digital Twin**, it proactively orchestrates your fragmented workspace using **Vertex AI**, **Gemini 1.5 Flash**, and the **Model Context Protocol (MCP)**.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.12+-green.svg)](https://python.org)
@@ -11,7 +11,11 @@ Multi-Agent Productivity Assistant powered by Google ADK + Vertex AI Gemini + MC
 
 ---
 
-## [Architecture Overview](./infra/ARCHITECTURE.md) | [Technical Stack](./infra/TECHSTACK.md)
+---
+
+## 📺 Demo & Submission
+*   **Demo Video:** [Watch on YouTube](https://youtu.be/ORCHEFLOW_DEMO_LINK)
+*   **Architecture Overview:** [Deep Dive](./infra/ARCHITECTURE.md) | [Technical Stack](./infra/TECHSTACK.md)
 
 ```
 API Service (FastAPI)
@@ -72,12 +76,15 @@ We use **Terraform** for Infrastructure as Code and **Artifact Registry** for co
 
 ### Full Deployment Pipeline
 ```powershell
+# Core deployment targeting asia-southeast1 (matches AlloyDB)
 .\scripts\deploy_gcp.ps1
 ```
 This script will:
-1. Build and push Docker images for API, Agents, and MCP to **Artifact Registry**.
-2. Run `terraform apply` to provision/update **Cloud Run** services.
+1. Build and push Docker images for API, Agents, and MCP to **Artifact Registry** via Google Cloud Build.
+2. Run `terraform apply` (or `gcloud run deploy` fallback) to provision/update **Cloud Run** services in `asia-southeast1`.
 3. Output the production URLs.
+
+> **Note on OAuth in Production:** Google Cloud Run terminates TLS at the edge. To satisfy strict `google-auth-oauthlib` HTTPS callbacks and avoid `OAuth 2 MUST utilize https` or 400 `redirect_uri` mismatch errors, the FastAPI production backend dynamically casts inbound proxy headers back to HTTPS.
 
 ---
 
@@ -85,9 +92,9 @@ This script will:
 
 ### Frameworks & AI
 - **Google ADK** — Multi-agent orchestration framework (Vertex AI native)
-- **Vertex AI Gemini 2.5 Flash** — High-speed pipeline orchestration
-- **Vertex AI Gemini 2.0 Flash** — Specialized sub-agent reasoning
-- **MCP (Model Context Protocol)** — Standardized tool/context interface
+- **Vertex AI Gemini 1.5 Flash** — High-speed pipeline orchestration and low-latency reasoning
+- **Vertex AI Gemini 1.0 Pro** — (Optional) Specialized long-context analysis
+- **MCP (Model Context Protocol)** — Standardized tool/context interface between the mesh and your apps
 
 ### Infrastructure
 - **Cloud Run** — Highly-scalable, serverless container execution
