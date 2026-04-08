@@ -7,14 +7,14 @@ OrcheFlowAI is a high-performance **Multi-Agent Intelligence Mesh** designed to 
 [![Python](https://img.shields.io/badge/Python-3.12+-green.svg)](https://python.org)
 [![Google ADK](https://img.shields.io/badge/Google-ADK-orange.svg)](https://cloud.google.com/vertex-ai)
 [![Cloud Run](https://img.shields.io/badge/Deploy-Cloud_Run-blue.svg)](https://cloud.google.com/run)
-[![CI](https://github.com/sivasubramanian86/orcheflowai/actions/workflows/deploy.yml/badge.svg)](https://github.com/sivasubramanian86/orcheflowai/actions)
+[![CI](https://github.com/sivasubramanian86/orcheflowai/actions/workflows/ci.yml/badge.svg)](https://github.com/sivasubramanian86/orcheflowai/actions)
 
 ---
 
 ---
 
 ## 📺 Demo & Submission
-*   **Demo Video:** [Watch on YouTube](https://youtu.be/ORCHEFLOW_DEMO_LINK)
+*   **Demo Video:** [Watch on YouTube](https://youtu.be/-rA-vg5P6Nc)
 *   **Architecture Overview:** [Deep Dive](./infra/ARCHITECTURE.md) | [Technical Stack](./infra/TECHSTACK.md)
 
 ```

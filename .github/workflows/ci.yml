@@ -1,0 +1,31 @@
+# .github/workflows/ci.yml
+# Primary CI: Run unit tests and check coverage
+name: OrcheFlowAI — Unit Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Test ────────────────────────────────────────────────────────────────────
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-asyncio pytest-mock pytest-cov
+          pip install -r agents/requirements.txt
+          pip install -r api/requirements.txt
+          pip install -r mcp_server/requirements.txt
+
+      - name: Run unit tests
+        run: pytest tests/unit/ -v --cov=. --cov-report=xml
