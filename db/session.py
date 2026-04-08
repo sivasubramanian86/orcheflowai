@@ -36,7 +36,7 @@ def create_robust_engine(url: str):
         # For SQLite fallback
         return create_async_engine(url, echo=False)
     except Exception:
-        return create_async_engine("sqlite+aiosqlite:///local_demo.db", echo=False)
+        return create_async_engine("sqlite+aiosqlite:///sample_data/local_demo.db", echo=False)
 
 # Global engine instance
 engine = create_robust_engine(DATABASE_URL)
@@ -95,7 +95,7 @@ async def get_db() -> AsyncSession:
     if use_fallback and engine.dialect.name == "postgresql":
         print("!! [RECOVERY] Attempting Auto-switch to Local SQLite for 2026 demo stability...")
         try:
-            engine = create_async_engine("sqlite+aiosqlite:///local_demo.db", echo=False)
+            engine = create_async_engine("sqlite+aiosqlite:///sample_data/local_demo.db", echo=False)
             AsyncSessionFactory = async_sessionmaker(
                 engine, class_=AsyncSession, expire_on_commit=False, 
                 autocommit=False, autoflush=False
